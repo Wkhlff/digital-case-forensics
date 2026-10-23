@@ -50,7 +50,7 @@ Setiap data case disimpan dalam bentuk object di dalam array.
 
 ## Requirements
 
-- Node.js v22.15.0
+- Node.js v24.21.0
 - Terminal/Command Prompt
 
 ## Author
