@@ -29,56 +29,83 @@ export function loadCaseFromFile() {
 }
 
 // Add Case
-export function addCase(newCase) {
+export const addCase = ({
+    caseId,
+    caseName,
+    description,
+    investigatorId,
+    priority,
+    status,
+    createdAt
+}) => {
     if (
-        !newCase.caseId ||
-        !newCase.caseName ||
-        !newCase.description ||
-        !newCase.investigatorId ||
-        !newCase.priority ||
-        !newCase.status ||
-        !newCase.createdAt
+        !caseId?.trim() ||
+        !caseName?.trim() ||
+        !description?.trim() ||
+        !investigatorId?.trim() ||
+        !priority?.trim() ||
+        !status?.trim() ||
+        !createdAt?.trim()
     ) {
         console.log("Semua field wajib diisi!");
         return;
     }
 
-    if (!isValidStatus(newCase.status)) {
-        console.log("Status tidak valid! Gunakan: open, close, atau in progress.");
+    if (!isValidStatus(status)) {
+        console.log("Status tidak valid! Gunakan: Open, Close, atau In Progress.");
         return;
     }
 
-    if (!isValidDateTime(newCase.createdAt)) {
-        console.log("Format waktu tidak valid! Gunakan format: YYYY-MM-DDTHH:MM:SS");
+    if (!isValidPriority(priority)) {
+        console.log("Priority tidak valid! Gunakan: Low, Medium, atau High.");
         return;
     }
 
-    const exists = cases.find(c => c.caseId === newCase.caseId);
+    if (!isValidDateTime(createdAt)) {
+        console.log("Format waktu tidak valid! Gunakan format tanggal yang valid.");
+        return;
+    }
+
+    const exists = cases.some(
+        (item) => item.caseId.toLowerCase() === caseId.trim().toLowerCase()
+    );
+
     if (exists) {
-        console.log(`ID Case ${newCase.caseId} sudah ada!`);
+        console.log(`ID Case ${caseId} sudah ada!`);
         return;
     }
 
-    cases.push(newCase);
-    saveCaseToFile();
+    cases.push({
+        caseId: caseId.trim(),
+        caseName: caseName.trim(),
+        description: description.trim(),
+        investigatorId: investigatorId.trim(),
+        priority: priority.trim(),
+        status: status.trim(),
+        createdAt: createdAt.trim()
+    });
 
-    console.log(`Case ${newCase.caseId} berhasil ditambahkan.`);
-}
+    saveCaseToFile();
+    console.log(`Case ${caseId} berhasil ditambahkan.`);
+};
 
 //Read All Case
-export function getAllCases() {
+export const getAllCases = () => {
+    if (cases.length === 0) {
+        console.log("Belum ada data case.");
+        return [];
+    }
+
+    const caseList = [];
+
+    for (const { caseId, caseName, status } of cases) {
+        caseList.push({ caseId, caseName, status });
+    }
+
     console.log("Daftar Semua Case:");
-
-    const caseList = cases.map(c => ({
-        caseId: c.caseId,
-        caseName: c.caseName,
-        status: c.status
-    }));
-
     console.table(caseList);
-
     return caseList;
-}
+};
 
 //Get Case by Id
 export function getCaseById(id) {
@@ -93,23 +120,37 @@ export function getCaseById(id) {
 }
 
 //Update Case
-export function updateCase(id, updatedData) {
-  const index = cases.findIndex(f => 
-    f.caseId.toLocaleLowerCase() === id.toLocaleLowerCase());
-  if (index === -1) {
-    console.log(`Tidak ada case id dengan id ${id}.`);
-    return;
-  }
+export const updateCase = (id, updatedData) => {
+    const index = cases.findIndex(
+        (item) => item.caseId.toLowerCase() === id.trim().toLowerCase()
+    );
 
-  if (updatedData.status && !isValidStatus(updatedData.status)) {
-    console.log("Format status tidak valid!");
-    return;
-  }
+    if (index === -1) {
+        console.log(`Case dengan ID ${id} tidak ditemukan.`);
+        return;
+    }
 
-  cases[index] = { ...cases[index], ...updatedData };
-  saveCaseToFile();
-  console.log(`Data Case ${id} berhasil diperbarui.`);
-}
+    const cleanedData = Object.fromEntries(
+        Object.entries(updatedData)
+            .filter(([, value]) => typeof value === "string" && value.trim() !== "")
+            .map(([key, value]) => [key, value.trim()])
+    );
+
+    if (Object.keys(cleanedData).length === 0) {
+        console.log("Tidak ada perubahan yang dimasukkan.");
+        return;
+    }
+
+    if (cleanedData.status && !isValidStatus(cleanedData.status)) {
+        console.log("Status tidak valid! Gunakan: Open, Close, atau In Progress.");
+        return;
+    }
+
+    if (cleanedData.priority && !isValidPriority(cleanedData.priority)) {
+        console.log("Priority tidak valid! Gunakan: Low, Medium, atau High.");
+        return;
+    }
+  }
 
 //Delete Case
 export function deleteCase(id) {
