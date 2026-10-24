@@ -8,6 +8,13 @@ function isValidStatus(statusStr) {
   return validStatuses.includes(statusStr.trim().toLowerCase());
 }
 
+function isValidPriority(priorityStr) {
+  if (typeof priorityStr !== "string") return false;
+  
+  const validStatuses = ["low", "medium", "high"];
+  return validStatuses.includes(priorityStr.trim().toLowerCase());
+}
+
 function isValidDateTime(dateTimeStr) {
   return !isNaN(Date.parse(dateTimeStr));
 }
@@ -154,7 +161,7 @@ export const updateCase = (id, updatedData) => {
 
 //Delete Case
 export function deleteCase(id) {
-  const index = cases.findIndex(f => f.caseId === id);
+  const index = cases.findIndex(f => f.caseId.toLowerCase() === id.toLocaleLowerCase());
   if (index === -1) {
     console.log(`Tidak ada case dengan id ${id}.`);
     return;

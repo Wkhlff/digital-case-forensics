@@ -73,12 +73,11 @@ function askMenu() {
 
       case "2":
         getAllCases();
-        return showMenu(), askMenu();
+        return askMenu();
       
       case "3":
         rl.question("Masukkan Id Case: ", (id) => {
           getCaseById(id);
-          showMenu();
           askMenu();
         });
         break;
@@ -95,7 +94,6 @@ function askMenu() {
       case "5":
         rl.question("Masukkan Id Case yang Ingin Dihapus: ", (id) => {
           deleteCase(id);
-          showMenu();
           askMenu();
         });
         break;
