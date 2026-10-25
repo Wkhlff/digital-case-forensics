@@ -20,7 +20,7 @@ Program ini memungkinkan pengguna untuk mengelola data case digital forensics se
 - Ubah package.json agar menggunakan module.
 - Jalankan program dengan : node main.js
 
-## Format Data Penerbangan
+## Format Data Case
 
 Setiap data case disimpan dalam bentuk object di dalam array.
 
