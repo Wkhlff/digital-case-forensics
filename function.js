@@ -157,7 +157,11 @@ export const updateCase = (id, updatedData) => {
         console.log("Priority tidak valid! Gunakan: Low, Medium, atau High.");
         return;
     }
-  }
+
+    Object.assign(cases[index], cleanedData);
+    saveCaseToFile();
+    console.log("Data Case berhasil diperbarui!");
+};
 
 //Delete Case
 export function deleteCase(id) {
