@@ -57,5 +57,5 @@ Setiap data case disimpan dalam bentuk object di dalam array.
 
 - Nama: Muhammad Khalif
 - Tema Proyek: Digital Case Forensics Management System.
-- Kelas: Trial Study Club Backend Basic KSM Android UPNVJ 2026.
+- Kelas: Trial Study Club Backend Basic KSM Veterantech UPNVJ 2026.
 - Mentor: Nadia Jasmine Aulia
